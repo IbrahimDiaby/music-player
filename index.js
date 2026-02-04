@@ -1,4 +1,5 @@
 const songs = [
+  { source: "/assets/audios/test.mp3", title: "Count" },
   { source: "/assets/audios/Back For You.mp3", title: "Back For You" },
   {
     source:
@@ -83,6 +84,8 @@ window.addEventListener("DOMContentLoaded", () => {
     replaytBtn.classList.remove("active");
     autoNextState = autoNextBtn.classList.contains("active") ? true : false;
     autoRepeatState = false;
+    
+    autoRepeat();
   });
 
   replaytBtn.addEventListener("click", () => {
@@ -90,6 +93,8 @@ window.addEventListener("DOMContentLoaded", () => {
     autoNextBtn.classList.remove("active");
     autoRepeatState = replaytBtn.classList.contains("active") ? true : false;
     autoNextState = false;
+    
+    autoRepeat();
   });
 
   // Update Play Back Rate
@@ -103,12 +108,13 @@ window.addEventListener("DOMContentLoaded", () => {
   AudioPlayer.addEventListener("ended", () => {
 
     if(autoRepeatState){
-      autoRepeatState();
+      autoRepeat();
     }
 
     if(autoNextState){
       autoNext();
     }
+    
   })
 
   previousSong.addEventListener("click", () => {
@@ -171,6 +177,7 @@ const updateSong = (action) => {
   AudioPlayer.playbackRate = playBackRateX2.classList.contains("active")
     ? 2
     : 1;
+    AudioPlayer.play();
 };
 
 const updateTimeInfo = () => {
@@ -194,9 +201,9 @@ const updateTimeInfo = () => {
         ? "0" + Math.floor(currentTime / 60)
         : Math.floor(currentTime / 60);
     const secondesCT =
-      Math.floor(currentTime % 60) < 10
-        ? "0" + Math.floor(currentTime % 60)
-        : Math.floor(currentTime % 60);
+      Math.ceil(currentTime % 60) < 10
+        ? "0" + Math.ceil(currentTime % 60)
+        : Math.ceil(currentTime % 60);
 
     // Full time converter
     const minutesFT =
@@ -223,3 +230,12 @@ const pathname = () => {
   const base = document.querySelector("base");
   base.setAttribute("href", window.origin);
 };
+
+const autoRepeat = () => {
+  const AudioPlayer = document.querySelector("#audio-player");
+  if(autoRepeatState) {
+    AudioPlayer.setAttribute("loop", "");
+  } else {
+    AudioPlayer.removeAttribute("loop");
+  }
+}
