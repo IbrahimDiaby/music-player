@@ -1,21 +1,67 @@
 const songs = [
-  "assets/audios/Back For You.mp3",
-  "assets/audios/Chris Brown - Angel Numbers Ten Toes (Official Video).mp3",
-  "assets/audios/Chris Brown - Bruce Lee (Lyric Video).mp3",
-  "assets/audios/Chris Brown - It Depends (Audio) ft. Bryson Tiller.mp3",
-  "assets/audios/Chris Brown - Talm' Bout (Official Video).mp3",
-  "assets/audios/Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance.mp3",
-  "assets/audios/Justin Bieber - Ghost.mp3",
-  "assets/audios/Justin Bieber - Hold On.mp3",
-  "assets/audios/Justin Bieber - Love Yourself (PURPOSE _ The Movement).mp3",
-  "assets/audios/Justin Bieber - Mistletoe (Official Music Video).mp3",
-  "assets/audios/Justin Bieber - What Do You Mean_.mp3",
-  "assets/audios/One Direction - Better Than Words (Audio).mp3",
-  "assets/audios/One Direction - Steal My Girl.mp3",
-  "assets/audios/Shawn Mendes - Treat You Better.mp3",
+  { source: "assets/audios/Back For You.mp3", title: "Back For You" },
+  {
+    source:
+      "assets/audios/Chris Brown - Angel Numbers Ten Toes (Official Video).mp3",
+    title: "Chris Brown - Angel Numbers Ten Toes (Official Video)",
+  },
+  {
+    source: "assets/audios/Chris Brown - Bruce Lee (Lyric Video).mp3",
+    title: "Chris Brown - Bruce Lee (Lyric Video)",
+  },
+  {
+    source:
+      "assets/audios/Chris Brown - It Depends (Audio) ft. Bryson Tiller.mp3",
+    title: "Chris Brown - It Depends (Audio) ft. Bryson Tiller",
+  },
+  {
+    source: "assets/audios/Chris Brown - Talm' Bout (Official Video).mp3",
+    title: "Chris Brown - Talm' Bout (Official Video)",
+  },
+  {
+    source:
+      "assets/audios/Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance.mp3",
+    title:
+      "Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance",
+  },
+  {
+    source: "assets/audios/Justin Bieber - Ghost.mp3",
+    title: "Justin Bieber - Ghost",
+  },
+  {
+    source: "assets/audios/Justin Bieber - Hold On.mp3",
+    title: "Justin Bieber - Hold On",
+  },
+  {
+    source:
+      "assets/audios/Justin Bieber - Love Yourself (PURPOSE _ The Movement).mp3",
+    title: "Justin Bieber - Love Yourself (PURPOSE _ The Movement)",
+  },
+  {
+    source:
+      "assets/audios/Justin Bieber - Mistletoe (Official Music Video).mp3",
+    title: "Justin Bieber - Mistletoe (Official Music Video)",
+  },
+  {
+    source: "assets/audios/Justin Bieber - What Do You Mean_.mp3",
+    title: "Justin Bieber - What Do You Mean_",
+  },
+  {
+    source: "assets/audios/One Direction - Better Than Words (Audio).mp3",
+    title: "One Direction - Better Than Words (Audio)",
+  },
+  {
+    source: "assets/audios/One Direction - Steal My Girl.mp3",
+    title: "One Direction - Steal My Girl",
+  },
+  {
+    source: "assets/audios/Shawn Mendes - Treat You Better.mp3",
+    title: "Shawn Mendes - Treat You Better",
+  },
 ];
 
 let currentSongIndex = 0;
+let currentInterval;
 
 window.addEventListener("DOMContentLoaded", () => {
   const AudioPlayer = document.querySelector("#audio-player");
@@ -25,10 +71,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const nextSong = document.querySelector(".hgi-next");
   const playBackRateX2 = document.querySelector(".btn-playback");
 
-    // Update Play Back Rate  
+  // Update Play Back Rate
   playBackRateX2.addEventListener("click", () => {
     playBackRateX2.classList.toggle("active");
-    AudioPlayer.playbackRate = ( playBackRateX2.classList.contains("active") ) ? 2 : 1;
+    AudioPlayer.playbackRate = playBackRateX2.classList.contains("active")
+      ? 2
+      : 1;
   });
 
   previousSong.addEventListener("click", () => {
@@ -49,16 +97,24 @@ window.addEventListener("DOMContentLoaded", () => {
 
   AudioPlayer.addEventListener("playing", () => {
     audioControllerButtonIcon.classList.replace("hgi-play-circle", "hgi-pause");
+
+    // Update time info
+    currentInterval = updateTimeInfo();
   });
 
   AudioPlayer.addEventListener("pause", () => {
     audioControllerButtonIcon.classList.replace("hgi-pause", "hgi-play-circle");
+    clearInterval(currentInterval);
   });
 });
 
 // Change Song
 const updateSong = (action) => {
   const AudioPlayer = document.querySelector("#audio-player");
+  const playBackRateX2 = document.querySelector(".btn-playback");
+
+  const titleSong = document.querySelector(".song-title-container .song-title");
+
   switch (action) {
     case "previous":
       currentSongIndex =
@@ -78,5 +134,51 @@ const updateSong = (action) => {
       break;
   }
 
-  AudioPlayer.setAttribute("src", songs[currentSongIndex]);
+  titleSong.textContent = `${songs[currentSongIndex].title}`;
+  AudioPlayer.setAttribute("src", songs[currentSongIndex].source);
+  AudioPlayer.playbackRate = playBackRateX2.classList.contains("active")
+    ? 2
+    : 1;
+};
+
+const updateTimeInfo = () => {
+  const AudioPlayer = document.querySelector("#audio-player");
+
+  const currentTimeContainer = document.querySelector(
+    ".time-info-container .current-time",
+  );
+  const fullTimeContainer = document.querySelector(
+    ".time-info-container .song-full-time",
+  );
+
+  const interval = setInterval(() => {
+    // Duration
+    const duration = AudioPlayer.duration;
+    const currentTime = AudioPlayer.currentTime;
+
+    // Current time converter
+    const minutesCT =
+      Math.floor(currentTime / 60) < 10
+        ? "0" + Math.floor(currentTime / 60)
+        : Math.floor(currentTime / 60);
+    const secondesCT =
+      Math.floor(currentTime % 60) < 10
+        ? "0" + Math.floor(currentTime % 60)
+        : Math.floor(currentTime % 60);
+
+    // Full time converter
+    const minutesFT =
+      Math.floor(duration / 60) < 10
+        ? "0" + Math.floor(duration / 60)
+        : Math.floor(duration / 60);
+    const secondesFT =
+      Math.floor(duration % 60) < 10
+        ? "0" + Math.floor(duration % 60)
+        : Math.floor(duration % 60);
+
+    currentTimeContainer.textContent = `${minutesCT}:${secondesCT}`;
+    fullTimeContainer.textContent = `${minutesFT}:${secondesFT}`;
+  }, 1000);
+
+  return interval;
 };
