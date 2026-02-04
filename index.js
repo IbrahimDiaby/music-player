@@ -80,6 +80,33 @@ window.addEventListener("DOMContentLoaded", () => {
   const autoNextBtn = document.querySelector("#auto-next-btn");
   const replaytBtn = document.querySelector("#repeat-btn");
 
+  progressIndicator.addEventListener("change", (e) => {
+    AudioPlayer.currentTime = e.target.value;
+    const currentTimeContainer = document.querySelector(
+      ".time-info-container .current-time",
+    );
+    const fullTimeContainer = document.querySelector(
+      ".time-info-container .song-full-time",
+    );
+
+    const duration = AudioPlayer.duration;
+    const currentTime = AudioPlayer.currentTime;
+
+    currentTimeContainer.textContent = formatTime(currentTime);
+    fullTimeContainer.textContent = formatTime(duration);
+
+    // Progress bar
+    const progress = (currentTime / duration) * 100;
+
+    progressIndicator.style.background = `
+      linear-gradient(
+        90deg,
+        var(--progress-bg) ${progress}%,
+        transparent ${progress}%
+      )
+    `;
+  });
+
   autoNextBtn.addEventListener("click", () => {
     autoNextBtn.classList.toggle("active");
     replaytBtn.classList.remove("active");
@@ -114,6 +141,13 @@ window.addEventListener("DOMContentLoaded", () => {
     if (autoNextState) {
       autoNext();
     }
+
+    setTimeout(() => {
+      progressIndicator.setAttribute(
+        "value",
+        progressIndicator.getAttribute("max"),
+      );
+    }, 200);
   });
 
   previousSong.addEventListener("click", () => {
@@ -144,6 +178,13 @@ window.addEventListener("DOMContentLoaded", () => {
     clearInterval(currentInterval);
   });
 });
+
+// Time helpers
+const formatTime = (time) => {
+  const minutes = String(Math.floor(time / 60)).padStart(2, "0");
+  const seconds = String(Math.floor(time % 60)).padStart(2, "0");
+  return `${minutes}:${seconds}`;
+};
 
 // Change Song
 const updateSong = (action) => {
@@ -182,10 +223,14 @@ const updateSong = (action) => {
   progressIndicator.setAttribute("value", 0);
 };
 
-const updateTimeInfo = () => {
-  const AudioPlayer = document.querySelector("#audio-player");
+const seekbar = () => {
+  const audioPlayer = document.querySelector("#audio-player");
   const progressIndicator = document.querySelector("#current-time-range");
+};
 
+const updateTimeInfo = () => {
+  const audioPlayer = document.querySelector("#audio-player");
+  const progressIndicator = document.querySelector("#current-time-range");
   const currentTimeContainer = document.querySelector(
     ".time-info-container .current-time",
   );
@@ -193,39 +238,31 @@ const updateTimeInfo = () => {
     ".time-info-container .song-full-time",
   );
 
+  if (!audioPlayer || !progressIndicator) return;
+
+  progressIndicator.min = 0;
+
   const interval = setInterval(() => {
-    // Duration
-    const duration = AudioPlayer.duration;
-    const currentTime = AudioPlayer.currentTime;
+    if (isNaN(audioPlayer.duration)) return;
 
-    // Current time converter
-    const minutesCT =
-      Math.floor(currentTime / 60) < 10
-        ? "0" + Math.floor(currentTime / 60)
-        : Math.floor(currentTime / 60);
-    const secondesCT =
-      Math.ceil(currentTime % 60) < 10
-        ? "0" + Math.ceil(currentTime % 60)
-        : Math.ceil(currentTime % 60);
+    const duration = audioPlayer.duration;
+    const currentTime = audioPlayer.currentTime;
 
-    // Full time converter
-    const minutesFT =
-      Math.floor(duration / 60) < 10
-        ? "0" + Math.floor(duration / 60)
-        : Math.floor(duration / 60);
-    const secondesFT =
-      Math.floor(duration % 60) < 10
-        ? "0" + Math.floor(duration % 60)
-        : Math.floor(duration % 60);
+    currentTimeContainer.textContent = formatTime(currentTime);
+    fullTimeContainer.textContent = formatTime(duration);
 
-    currentTimeContainer.textContent = `${minutesCT}:${secondesCT}`;
-    fullTimeContainer.textContent = `${minutesFT}:${secondesFT}`;
+    // Progress bar
+    const progress = (currentTime / duration) * 100;
 
-    // Progress Bar
-    progressIndicator.style.background = `linear-gradient(90deg, from var(--progress-bg), var(--progress-bg) ${Math.ceil((currentTime * 100)/duration)}%, transparent 100%)`;
-    progressIndicator.setAttribute("min", 0);
-    progressIndicator.setAttribute("max", duration);
-    progressIndicator.setAttribute("value", currentTime);
+    progressIndicator.max = duration;
+    progressIndicator.value = currentTime;
+    progressIndicator.style.background = `
+      linear-gradient(
+        90deg,
+        var(--progress-bg) ${progress}%,
+        transparent ${progress}%
+      )
+    `;
   }, 1000);
 
   return interval;
