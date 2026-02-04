@@ -1,62 +1,62 @@
 const songs = [
-  { source: "/music-player/assets/audios/test.mp3", title: "Count" },
-  { source: "/music-player/assets/audios/Back For You.mp3", title: "Back For You" },
+  { source: "/assets/audios/test.mp3", title: "Count" },
+  { source: "/assets/audios/Back For You.mp3", title: "Back For You" },
   {
     source:
-      "/music-player/assets/audios/Chris Brown - Angel Numbers Ten Toes (Official Video).mp3",
+      "/assets/audios/Chris Brown - Angel Numbers Ten Toes (Official Video).mp3",
     title: "Chris Brown - Angel Numbers Ten Toes (Official Video)",
   },
   {
-    source: "/music-player/assets/audios/Chris Brown - Bruce Lee (Lyric Video).mp3",
+    source: "/assets/audios/Chris Brown - Bruce Lee (Lyric Video).mp3",
     title: "Chris Brown - Bruce Lee (Lyric Video)",
   },
   {
     source:
-      "/music-player/assets/audios/Chris Brown - It Depends (Audio) ft. Bryson Tiller.mp3",
+      "/assets/audios/Chris Brown - It Depends (Audio) ft. Bryson Tiller.mp3",
     title: "Chris Brown - It Depends (Audio) ft. Bryson Tiller",
   },
   {
-    source: "/music-player/assets/audios/Chris Brown - Talm' Bout (Official Video).mp3",
+    source: "/assets/audios/Chris Brown - Talm' Bout (Official Video).mp3",
     title: "Chris Brown - Talm' Bout (Official Video)",
   },
   {
     source:
-      "/music-player/assets/audios/Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance.mp3",
+      "/assets/audios/Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance.mp3",
     title:
       "Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance",
   },
   {
-    source: "/music-player/assets/audios/Justin Bieber - Ghost.mp3",
+    source: "/assets/audios/Justin Bieber - Ghost.mp3",
     title: "Justin Bieber - Ghost",
   },
   {
-    source: "/music-player/assets/audios/Justin Bieber - Hold On.mp3",
+    source: "/assets/audios/Justin Bieber - Hold On.mp3",
     title: "Justin Bieber - Hold On",
   },
   {
     source:
-      "/music-player/assets/audios/Justin Bieber - Love Yourself (PURPOSE _ The Movement).mp3",
+      "/assets/audios/Justin Bieber - Love Yourself (PURPOSE _ The Movement).mp3",
     title: "Justin Bieber - Love Yourself (PURPOSE _ The Movement)",
   },
   {
     source:
-      "/music-player/assets/audios/Justin Bieber - Mistletoe (Official Music Video).mp3",
+      "/assets/audios/Justin Bieber - Mistletoe (Official Music Video).mp3",
     title: "Justin Bieber - Mistletoe (Official Music Video)",
   },
   {
-    source: "/music-player/assets/audios/Justin Bieber - What Do You Mean_.mp3",
+    source: "/assets/audios/Justin Bieber - What Do You Mean_.mp3",
     title: "Justin Bieber - What Do You Mean_",
   },
   {
-    source: "/music-player/assets/audios/One Direction - Better Than Words (Audio).mp3",
+    source: "/assets/audios/One Direction - Better Than Words (Audio).mp3",
     title: "One Direction - Better Than Words (Audio)",
   },
   {
-    source: "/music-player/assets/audios/One Direction - Steal My Girl.mp3",
+    source: "/assets/audios/One Direction - Steal My Girl.mp3",
     title: "One Direction - Steal My Girl",
   },
   {
-    source: "/music-player/assets/audios/Shawn Mendes - Treat You Better.mp3",
+    source: "/assets/audios/Shawn Mendes - Treat You Better.mp3",
     title: "Shawn Mendes - Treat You Better",
   },
 ];
@@ -69,6 +69,7 @@ let autoRepeatState = false;
 window.addEventListener("DOMContentLoaded", () => {
   pathname();
 
+  const progressIndicator = document.querySelector("#current-time-range");
   const AudioPlayer = document.querySelector("#audio-player");
   const audioControllerButtonIcon = document.querySelector("#play-pause-btn");
 
@@ -84,7 +85,7 @@ window.addEventListener("DOMContentLoaded", () => {
     replaytBtn.classList.remove("active");
     autoNextState = autoNextBtn.classList.contains("active") ? true : false;
     autoRepeatState = false;
-    
+
     autoRepeat();
   });
 
@@ -93,7 +94,7 @@ window.addEventListener("DOMContentLoaded", () => {
     autoNextBtn.classList.remove("active");
     autoRepeatState = replaytBtn.classList.contains("active") ? true : false;
     autoNextState = false;
-    
+
     autoRepeat();
   });
 
@@ -106,16 +107,14 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   AudioPlayer.addEventListener("ended", () => {
-
-    if(autoRepeatState){
+    if (autoRepeatState) {
       autoRepeat();
     }
 
-    if(autoNextState){
+    if (autoNextState) {
       autoNext();
     }
-    
-  })
+  });
 
   previousSong.addEventListener("click", () => {
     updateSong("previous");
@@ -150,6 +149,7 @@ window.addEventListener("DOMContentLoaded", () => {
 const updateSong = (action) => {
   const AudioPlayer = document.querySelector("#audio-player");
   const playBackRateX2 = document.querySelector(".btn-playback");
+  const progressIndicator = document.querySelector("#current-time-range");
 
   const titleSong = document.querySelector(".song-title-container .song-title");
 
@@ -177,11 +177,14 @@ const updateSong = (action) => {
   AudioPlayer.playbackRate = playBackRateX2.classList.contains("active")
     ? 2
     : 1;
-    AudioPlayer.play();
+  AudioPlayer.play();
+
+  progressIndicator.setAttribute("value", 0);
 };
 
 const updateTimeInfo = () => {
   const AudioPlayer = document.querySelector("#audio-player");
+  const progressIndicator = document.querySelector("#current-time-range");
 
   const currentTimeContainer = document.querySelector(
     ".time-info-container .current-time",
@@ -217,6 +220,12 @@ const updateTimeInfo = () => {
 
     currentTimeContainer.textContent = `${minutesCT}:${secondesCT}`;
     fullTimeContainer.textContent = `${minutesFT}:${secondesFT}`;
+
+    // Progress Bar
+    progressIndicator.style.background = `linear-gradient(90deg, from var(--progress-bg), var(--progress-bg) ${Math.ceil((currentTime * 100)/duration)}%, transparent 100%)`;
+    progressIndicator.setAttribute("min", 0);
+    progressIndicator.setAttribute("max", duration);
+    progressIndicator.setAttribute("value", currentTime);
   }, 1000);
 
   return interval;
@@ -224,7 +233,7 @@ const updateTimeInfo = () => {
 
 const autoNext = () => {
   updateSong("next");
-}
+};
 
 const pathname = () => {
   const base = document.querySelector("base");
@@ -233,9 +242,9 @@ const pathname = () => {
 
 const autoRepeat = () => {
   const AudioPlayer = document.querySelector("#audio-player");
-  if(autoRepeatState) {
+  if (autoRepeatState) {
     AudioPlayer.setAttribute("loop", "");
   } else {
     AudioPlayer.removeAttribute("loop");
   }
-}
+};

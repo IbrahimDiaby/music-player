@@ -12,20 +12,20 @@
     />
     <link
       rel="shortcut icon"
-      href="/music-player/assets/images/background.jpg"
+      href="/assets/images/background.jpg"
       type="image/x-icon"
     />
     <title>Music Player</title>
   </head>
-  <body>
+  <body class="dark">
     <div class="container">
       <div class="card">
         <div class="top-container">
           <div class="img-container">
             <img
-              src="/music-player/assets/images/background.jpg"
+              src="/assets/images/background.jpg"
               alt="Music Background Image"
-              srcset="/music-player/assets/images/background.jpg"
+              srcset="/assets/images/background.jpg"
             />
           </div>
           <div class="btn-container">
@@ -46,7 +46,9 @@
             <h4 class="song-title"></h4>
           </div>
           <div class="slide">
-            <div class="slide-indicator"></div>
+            <div class="slide-indicator">
+              <input type="range" name="current-time-range" id="current-time-range" >
+            </div>
             <audio src="#" id="audio-player"></audio>
           </div>
           <div class="time-info-container">
