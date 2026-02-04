@@ -1,62 +1,62 @@
 const songs = [
-  { source: "/assets/audios/test.mp3", title: "Count" },
-  { source: "/assets/audios/Back For You.mp3", title: "Back For You" },
+  { source: "/music-player/assets/audios/test.mp3", title: "Count" },
+  { source: "/music-player/assets/audios/Back For You.mp3", title: "Back For You" },
   {
     source:
-      "/assets/audios/Chris Brown - Angel Numbers Ten Toes (Official Video).mp3",
+      "/music-player/assets/audios/Chris Brown - Angel Numbers Ten Toes (Official Video).mp3",
     title: "Chris Brown - Angel Numbers Ten Toes (Official Video)",
   },
   {
-    source: "/assets/audios/Chris Brown - Bruce Lee (Lyric Video).mp3",
+    source: "/music-player/assets/audios/Chris Brown - Bruce Lee (Lyric Video).mp3",
     title: "Chris Brown - Bruce Lee (Lyric Video)",
   },
   {
     source:
-      "/assets/audios/Chris Brown - It Depends (Audio) ft. Bryson Tiller.mp3",
+      "/music-player/assets/audios/Chris Brown - It Depends (Audio) ft. Bryson Tiller.mp3",
     title: "Chris Brown - It Depends (Audio) ft. Bryson Tiller",
   },
   {
-    source: "/assets/audios/Chris Brown - Talm' Bout (Official Video).mp3",
+    source: "/music-player/assets/audios/Chris Brown - Talm' Bout (Official Video).mp3",
     title: "Chris Brown - Talm' Bout (Official Video)",
   },
   {
     source:
-      "/assets/audios/Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance.mp3",
+      "/music-player/assets/audios/Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance.mp3",
     title:
       "Chris Brown - Wheels Fall Off From The Block @4ShootersOnly Performance",
   },
   {
-    source: "/assets/audios/Justin Bieber - Ghost.mp3",
+    source: "/music-player/assets/audios/Justin Bieber - Ghost.mp3",
     title: "Justin Bieber - Ghost",
   },
   {
-    source: "/assets/audios/Justin Bieber - Hold On.mp3",
+    source: "/music-player/assets/audios/Justin Bieber - Hold On.mp3",
     title: "Justin Bieber - Hold On",
   },
   {
     source:
-      "/assets/audios/Justin Bieber - Love Yourself (PURPOSE _ The Movement).mp3",
+      "/music-player/assets/audios/Justin Bieber - Love Yourself (PURPOSE _ The Movement).mp3",
     title: "Justin Bieber - Love Yourself (PURPOSE _ The Movement)",
   },
   {
     source:
-      "/assets/audios/Justin Bieber - Mistletoe (Official Music Video).mp3",
+      "/music-player/assets/audios/Justin Bieber - Mistletoe (Official Music Video).mp3",
     title: "Justin Bieber - Mistletoe (Official Music Video)",
   },
   {
-    source: "/assets/audios/Justin Bieber - What Do You Mean_.mp3",
+    source: "/music-player/assets/audios/Justin Bieber - What Do You Mean_.mp3",
     title: "Justin Bieber - What Do You Mean_",
   },
   {
-    source: "/assets/audios/One Direction - Better Than Words (Audio).mp3",
+    source: "/music-player/assets/audios/One Direction - Better Than Words (Audio).mp3",
     title: "One Direction - Better Than Words (Audio)",
   },
   {
-    source: "/assets/audios/One Direction - Steal My Girl.mp3",
+    source: "/music-player/assets/audios/One Direction - Steal My Girl.mp3",
     title: "One Direction - Steal My Girl",
   },
   {
-    source: "/assets/audios/Shawn Mendes - Treat You Better.mp3",
+    source: "/music-player/assets/audios/Shawn Mendes - Treat You Better.mp3",
     title: "Shawn Mendes - Treat You Better",
   },
 ];
@@ -80,6 +80,16 @@ window.addEventListener("DOMContentLoaded", () => {
   const autoNextBtn = document.querySelector("#auto-next-btn");
   const replaytBtn = document.querySelector("#repeat-btn");
 
+  const updateProgress = (progress)=>{
+    progressIndicator.style.background = `
+      linear-gradient(
+        90deg,
+        var(--progress-bg) ${progress}%,
+        transparent ${progress}%
+      )
+    `;
+  }
+
   progressIndicator.addEventListener("change", (e) => {
     AudioPlayer.currentTime = e.target.value;
     const currentTimeContainer = document.querySelector(
@@ -97,14 +107,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Progress bar
     const progress = (currentTime / duration) * 100;
-
-    progressIndicator.style.background = `
-      linear-gradient(
-        90deg,
-        var(--progress-bg) ${progress}%,
-        transparent ${progress}%
-      )
-    `;
+    updateProgress(progress);
   });
 
   autoNextBtn.addEventListener("click", () => {
@@ -141,6 +144,8 @@ window.addEventListener("DOMContentLoaded", () => {
     if (autoNextState) {
       autoNext();
     }
+
+    progressIndicator.classList.add("ended");
 
     setTimeout(() => {
       progressIndicator.setAttribute(
@@ -191,8 +196,9 @@ const updateSong = (action) => {
   const AudioPlayer = document.querySelector("#audio-player");
   const playBackRateX2 = document.querySelector(".btn-playback");
   const progressIndicator = document.querySelector("#current-time-range");
-
   const titleSong = document.querySelector(".song-title-container .song-title");
+
+  progressIndicator.classList.remove("ended");
 
   switch (action) {
     case "previous":

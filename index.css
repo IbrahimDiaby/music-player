@@ -232,6 +232,14 @@ body {
       transition: all .6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+#current-time-range.ended::-webkit-slider-thumb,
+#current-time-range.ended::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+}
+
 @media screen and (max-width: 378px) {
   .btn-container i {
     font-size: 1rem;
