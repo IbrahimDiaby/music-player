@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="index.css" />
     <script src="index.js" type="module"></script>
-    <base href="#">
+    <base href="#" />
     <link
       rel="stylesheet"
       href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css"
@@ -29,28 +29,30 @@
             />
           </div>
           <div class="btn-container">
-            <i class="hgi hgi-stroke hgi-previous"></i>
-            <i class="hgi hgi-stroke hgi-play-circle" id="play-pause-btn"></i>
-            <i class="hgi hgi-stroke hgi-next"></i>
+            <div class="primaryOptions">
+              <i class="hgi hgi-stroke hgi-previous"></i>
+              <i class="hgi hgi-stroke hgi-play-circle" id="play-pause-btn"></i>
+              <i class="hgi hgi-stroke hgi-next"></i>
+            </div>
             <div class="options">
-                <span class="btn-playback">2x</span>
-                <i class="hgi hgi-stroke hgi-repeat"></i>
-                <i class="hgi hgi-stroke hgi-replay" ></i>
+              <span class="btn-playback">2x</span>
+              <i class="hgi hgi-stroke hgi-repeat" id="repeat-btn"></i>
+              <i class="hgi hgi-stroke hgi-replay" id="auto-next-btn"></i>
             </div>
           </div>
         </div>
         <div class="bottom-container">
-            <div class="song-title-container">
-                <h4 class="song-title">Ceci est le titre</h4>
-            </div>
-            <div class="slide">
-                <div class="slide-indicator"></div>
-                <audio src="#" id="audio-player"></audio>
-            </div>
-            <div class="time-info-container">
-                <span class="current-time">00:00</span>
-                <span class="song-full-time">00:00</span>
-            </div>
+          <div class="song-title-container">
+            <h4 class="song-title"></h4>
+          </div>
+          <div class="slide">
+            <div class="slide-indicator"></div>
+            <audio src="#" id="audio-player"></audio>
+          </div>
+          <div class="time-info-container">
+            <span class="current-time">00:00</span>
+            <span class="song-full-time">00:00</span>
+          </div>
         </div>
       </div>
     </div>

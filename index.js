@@ -62,10 +62,11 @@ const songs = [
 
 let currentSongIndex = 0;
 let currentInterval;
+let autoNextState = false;
+let autoRepeatState = false;
 
 window.addEventListener("DOMContentLoaded", () => {
-
-    pathname();
+  pathname();
 
   const AudioPlayer = document.querySelector("#audio-player");
   const audioControllerButtonIcon = document.querySelector("#play-pause-btn");
@@ -74,6 +75,23 @@ window.addEventListener("DOMContentLoaded", () => {
   const nextSong = document.querySelector(".hgi-next");
   const playBackRateX2 = document.querySelector(".btn-playback");
 
+  const autoNextBtn = document.querySelector("#auto-next-btn");
+  const replaytBtn = document.querySelector("#repeat-btn");
+
+  autoNextBtn.addEventListener("click", () => {
+    autoNextBtn.classList.toggle("active");
+    replaytBtn.classList.remove("active");
+    autoNextState = autoNextBtn.classList.contains("active") ? true : false;
+    autoRepeatState = false;
+  });
+
+  replaytBtn.addEventListener("click", () => {
+    replaytBtn.classList.toggle("active");
+    autoNextBtn.classList.remove("active");
+    autoRepeatState = replaytBtn.classList.contains("active") ? true : false;
+    autoNextState = false;
+  });
+
   // Update Play Back Rate
   playBackRateX2.addEventListener("click", () => {
     playBackRateX2.classList.toggle("active");
@@ -81,6 +99,17 @@ window.addEventListener("DOMContentLoaded", () => {
       ? 2
       : 1;
   });
+
+  AudioPlayer.addEventListener("ended", () => {
+
+    if(autoRepeatState){
+      autoRepeatState();
+    }
+
+    if(autoNextState){
+      autoNext();
+    }
+  })
 
   previousSong.addEventListener("click", () => {
     updateSong("previous");
@@ -186,9 +215,11 @@ const updateTimeInfo = () => {
   return interval;
 };
 
-const pathname = () => {
-    // console.log(window.location.pathname);
-
-    const base = document.querySelector("base");
-    base.setAttribute("href", window.origin);
+const autoNext = () => {
+  updateSong("next");
 }
+
+const pathname = () => {
+  const base = document.querySelector("base");
+  base.setAttribute("href", window.origin);
+};
