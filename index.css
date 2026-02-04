@@ -29,7 +29,6 @@ body{
     flex-direction: column;
     width: 400px;
     height: 400px;
-    /* background-color: white; */
     border-radius: 12px;
     box-shadow: 0 0 5px var(--shadow-color);
     background: linear-gradient(135deg, rgb(0, 255, 191), rgb(0, 179, 255));
@@ -83,12 +82,23 @@ body{
     transition: all .6s ease-in-out;
 }
 
-.btn-container i:nth-child(2){
+.btn-container i#play-pause-btn{
     transform: scale(2);
+    filter: drop-shadow(2px 2px 2px #ffffff);
 }
 
 .btn-container i:nth-child(4){
     transform: scale(0.7);
+}
+
+.btn-container .options{
+    display: flex;
+    gap: 0 1rem;
+    align-items: center;
+}
+
+.btn-container .options i {
+    font-size: 1.5rem;
 }
 
 .btn-container span{
@@ -145,4 +155,9 @@ body{
     border-radius: 12px;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,.3));
     box-shadow: inset 2px 0 0 #fff, inset 0 2px 0 #fff, inset 0 0 4px #fff;
+
+    stroke-width: 2px;
+    stroke: aqua;
+    stroke-dashoffset: 100px;
+    stroke-dasharray: 100px;
 }

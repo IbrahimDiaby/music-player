@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="index.css" />
     <script src="index.js" type="module"></script>
+    <base href="#">
     <link
       rel="stylesheet"
       href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css"
     />
     <link
       rel="shortcut icon"
-      href="assets/images/background.jpg"
+      href="/assets/images/background.jpg"
       type="image/x-icon"
     />
     <title>Music Player</title>
@@ -31,7 +32,11 @@
             <i class="hgi hgi-stroke hgi-previous"></i>
             <i class="hgi hgi-stroke hgi-play-circle" id="play-pause-btn"></i>
             <i class="hgi hgi-stroke hgi-next"></i>
-            <span class="btn-playback">2x</span>
+            <div class="options">
+                <span class="btn-playback">2x</span>
+                <i class="hgi hgi-stroke hgi-repeat"></i>
+                <i class="hgi hgi-stroke hgi-replay" ></i>
+            </div>
           </div>
         </div>
         <div class="bottom-container">
