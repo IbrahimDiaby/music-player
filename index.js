@@ -67,7 +67,7 @@ let autoNextState = false;
 let autoRepeatState = false;
 
 window.addEventListener("DOMContentLoaded", () => {
-  pathname();
+  // pathname();
 
   const progressIndicator = document.querySelector("#current-time-range");
   const AudioPlayer = document.querySelector("#audio-player");
@@ -278,10 +278,10 @@ const autoNext = () => {
   updateSong("next");
 };
 
-const pathname = () => {
-  const base = document.querySelector("base");
-  base.setAttribute("href", window.origin);
-};
+// const pathname = () => {
+//   const base = document.querySelector("base");
+//   base.setAttribute("href", window.origin);
+// };
 
 const autoRepeat = () => {
   const AudioPlayer = document.querySelector("#audio-player");
